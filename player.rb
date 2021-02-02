@@ -2,8 +2,8 @@ class Player
   attr_reader :name
 
   def initialize(name)
-    @name = $stdin.gets.chomp
+    @name = name
   end
 end
 
-player1 = 
+
