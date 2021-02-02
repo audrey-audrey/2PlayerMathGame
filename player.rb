@@ -1,6 +1,7 @@
 class Player
+  attr_accessor :lives, :score
   attr_reader :name
-  attr_accessor :lives, :score, :award_point
+  attr_writer :award_point
 
   def initialize(name)
     @name = name
@@ -14,6 +15,10 @@ class Player
 
   def award_point
     self.score += 1
+  end
+
+  def lost?
+    @lives == 0
   end
 end
 
