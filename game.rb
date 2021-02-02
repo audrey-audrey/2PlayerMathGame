@@ -24,18 +24,6 @@ class Game
     puts "#{@player_1.name}: #{@player_1.lives}/3 vs #{@player_2.name}: #{@player_2.lives}/3"
   end
 
-  def game_over
-    if @player_1.lost? 
-      puts "#{@player_2.name} wins with a score of #{@player_2.score}!!"
-      puts "---- GAME OVER ----"
-      puts "Good bye!"
-    elsif @player_2.lost?
-      puts "#{@player_1.name} wins with a score of #{@player_1.score}!!"
-      puts "---- GAME OVER ----"
-      puts "Good bye!"
-    end
-  end
-
   def round 
     @@number_of_rounds += 1
 
@@ -58,28 +46,38 @@ class Game
     current_board
     puts
 
-    game_over
+    if @player_1.lost? 
+      puts "#{@player_2.name} wins with a score of #{@player_2.score}!!"
+      puts "---- GAME OVER ----"
+      puts "Good bye!"
+    else 
+      # Ask Player 2 question
+      puts "----- NEW TURN -----"
+      p_2_q = Question.new
+      p_2_q.ask(@player_2.name)
+      print "> "
 
-    # Ask Player 2 question
-    puts "----- NEW TURN -----"
-    p_2_q = Question.new
-    p_2_q.ask(@player_2.name)
-    print "> "
+      p_2_answer = $stdin.gets.chomp.to_i
+      if p_2_q.check_answer?(p_2_answer)
+        puts "YES! You are correct."
+        @player_2.award_point
+      else
+        puts "Seriously #{@player_2.name}? No!"
+        @player_2.damage
+      end
 
-    p_2_answer = $stdin.gets.chomp.to_i
-    if p_2_q.check_answer?(p_2_answer)
-      puts "YES! You are correct."
-      @player_2.award_point
-    else
-      puts "Seriously #{@player_2.name}? No!"
-      @player_2.damage
+      puts
+      current_board
+      puts
+
+      if @player_2.lost?
+        puts "#{@player_1.name} wins with a score of #{@player_1.score}!!"
+        puts "---- GAME OVER ----"
+        puts "Good bye!"
+      else
+        round
+      end
     end
-
-    puts
-    current_board
-    puts
-
-    game_over
   end
 
   def start 
